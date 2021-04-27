@@ -11,19 +11,20 @@ from webargs.flaskparser import use_args
 from ..models.image import Image
 
 
-@doc(description="""Image resource""", )
+@doc(
+    description="""Image resource""",
+)
 class ImageResource(ImageBaseResource):
-
     @marshal_with(ImagesSchema)
-    @use_args(args_schema, location='query')
+    @use_args(args_schema, location="query")
     def get(self, args):
         """
         Return a paginated list of images.
         """
 
-        tag = args.get('pokemon')
-        page = args.get('page')
-        limit = args.get('limit')
+        tag = args.get("pokemon")
+        page = args.get("page")
+        limit = args.get("limit")
 
         if not tag:
             return {}
@@ -35,4 +36,4 @@ class ImageResource(ImageBaseResource):
             limit = 5
 
         images = list(Image.objects(tag=tag))
-        return {'images': images[page * limit: (page + 1) * limit]}
+        return {"images": images[page * limit : (page + 1) * limit]}

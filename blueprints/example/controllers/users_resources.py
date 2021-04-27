@@ -13,7 +13,9 @@ from ..models import User
 from ..schemas import UserSchema, PostUserSchema
 
 
-@doc(description="""User collection related operations""",)
+@doc(
+    description="""User collection related operations""",
+)
 class UsersResource(ExampleBaseResource):
     @marshal_with(PostUserSchema)
     @use_kwargs(UserSchema)
@@ -37,7 +39,9 @@ class UsersResource(ExampleBaseResource):
         return {"users": users}
 
 
-@doc(description="""User element related operations""",)
+@doc(
+    description="""User element related operations""",
+)
 class UserResource(ExampleBaseResource):
     @marshal_with(UserSchema)
     def get(self, user_id):

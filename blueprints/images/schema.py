@@ -13,5 +13,5 @@ class ImagesSchema(Schema):
 args_schema = {
     "page": fields.Int(description="Page number of table", default=1),
     "limit": fields.Int(description="How many entries per page", default=5),
-    "pokemon": fields.Str(description='Pokemon image to be searched')
+    "pokemon": fields.Str(description="Pokemon image to be searched"),
 }

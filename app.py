@@ -19,7 +19,7 @@ project_dir = os.path.dirname(os.path.abspath(__file__))
 
 
 def create_app(for_celery=False, testing=False):
-    """ Application Factory. """
+    """Application Factory."""
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_object(c)
@@ -56,7 +56,7 @@ def create_app(for_celery=False, testing=False):
 
 
 def register_shell(app: Flask):
-    """ Expose more attributes to the Flask Shell. """
+    """Expose more attributes to the Flask Shell."""
 
     @app.shell_context_processor
     def make_shell_context():
@@ -65,14 +65,14 @@ def register_shell(app: Flask):
 
 
 def register_extensions(testing: bool):
-    """ Register Flask extensions. """
+    """Register Flask extensions."""
 
     url = c.MONGODB_URL if not testing else c.TEST_MONGODB_URL
     mongoengine.connect(host=url)
 
 
 def register_blueprints(app: Flask):
-    """ Register Flask blueprints. """
+    """Register Flask blueprints."""
     app.config.update({"APISPEC_SPEC": APISPEC_SPEC})
     docs = FlaskApiSpec(app)
 
@@ -88,7 +88,7 @@ def register_blueprints(app: Flask):
 
 
 def register_external(skip_sentry=False):
-    """ Register external integrations. """
+    """Register external integrations."""
     # sentry
     if len(c.SENTRY_DSN) == 0:
         logger.warning("Sentry DSN not set.")
