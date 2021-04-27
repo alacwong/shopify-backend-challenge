@@ -13,6 +13,7 @@ import config as c
 import loggers
 from extensions import logger
 from spec import APISPEC_SPEC
+from cli import register_commands
 
 project_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -31,6 +32,7 @@ def create_app(for_celery=False, testing=False):
 
     app.before_request(loggers.before_request)
 
+    register_commands(app)
     register_extensions(testing)
     register_blueprints(app)
     register_shell(app)

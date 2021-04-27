@@ -1,5 +1,5 @@
 API_DESCRIPTION = """
-This is a description of the API.
+Pokemon image searching api
 """
 
 
