@@ -1,4 +1,4 @@
-name: Publish Docker image to GitHub Package Registry
+name: Publish Docker images to GitHub Package Registry
 on:
   push:
     branches:

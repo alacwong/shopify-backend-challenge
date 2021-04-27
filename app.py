@@ -78,7 +78,11 @@ def register_blueprints(app: Flask):
     from blueprints.example import example_bp
     from blueprints.example import routes as example_routes
 
+    from blueprints.images import images_bp
+    from blueprints.images import routes as image_routes
+
     example_routes.set_routes(app, example_bp, docs)
+    image_routes.set_routes(app, images_bp, docs)
 
 
 def register_external(skip_sentry=False):
