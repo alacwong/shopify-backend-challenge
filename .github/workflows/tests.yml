@@ -19,8 +19,3 @@ jobs:
     - name: Copy config file
       run: |
         cp config.py.bak config.py
-    - name: Run pytest
-      run: |
-        pytest
-
-
