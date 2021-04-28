@@ -30,6 +30,7 @@ dnspython==2.1.0
 
 # GCP
 google-cloud-storage==1.38.0
+google-cloud-automl==2.3.0
 
 # Miscellaneous
 pandas==1.2.4

@@ -5,11 +5,12 @@ These endpoints can be reached at /images/search/.
 """
 from flask_apispec import marshal_with, doc
 
-from ..schema import ImagesSchema, args_schema
+from ..schema import ImagesSchema, args_schema, file_schema
 from .image_base_resource import ImageBaseResource
 from webargs.flaskparser import use_args
 from ..models.image import Image
 from ..util.fuzzy_string_matcher import get_closest_string
+from ..util.auto_ml import predict
 
 
 @doc(
@@ -40,3 +41,34 @@ class ImageResource(ImageBaseResource):
 
         images = list(Image.objects(tag=tag))
         return {"images": images[page * limit: (page + 1) * limit]}
+
+
+class ReverseImageResource(ImageResource):
+
+    @use_args(file_schema, location='files')
+    @marshal_with(ImagesSchema)
+    def get(self, args):
+        """
+        reverse image search endpoint
+        """
+
+        image = args.get('file').read()
+        if not image:
+            return {}
+        prediction = predict(image)
+
+        limit = args.get('limit', 9)
+        page = args.get('page', 0)
+
+        images = {
+            pred: list(Image.objects(tag=pred))
+            for pred in prediction
+        }
+
+        result = []
+        for image in images:
+            new_limit = int(limit * prediction[image])
+            result.extend(images[image][page * new_limit: (page + 1) * new_limit])
+
+        return {'images': result}
+

@@ -15,3 +15,9 @@ args_schema = {
     "limit": fields.Int(description="How many entries per page", default=5),
     "pokemon": fields.Str(description="Pokemon image to be searched"),
 }
+
+file_schema = {
+    'file': fields.Field(),
+    "page": fields.Int(description="Page number of table", default=1),
+    "limit": fields.Int(description="How many entries per page", default=5),
+}
