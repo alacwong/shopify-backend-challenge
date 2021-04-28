@@ -9,6 +9,7 @@ from ..schema import ImagesSchema, args_schema
 from .image_base_resource import ImageBaseResource
 from webargs.flaskparser import use_args
 from ..models.image import Image
+from ..util.fuzzy_string_matcher import get_closest_string
 
 
 @doc(
@@ -30,10 +31,12 @@ class ImageResource(ImageBaseResource):
             return {}
 
         if not page:
-            page = 1
+            page = 0
 
         if not limit:
-            limit = 5
+            limit = 9
+
+        tag = get_closest_string(tag)
 
         images = list(Image.objects(tag=tag))
-        return {"images": images[page * limit : (page + 1) * limit]}
+        return {"images": images[page * limit: (page + 1) * limit]}

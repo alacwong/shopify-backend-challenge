@@ -30,3 +30,9 @@ dnspython==2.1.0
 
 # GCP
 google-cloud-storage==1.38.0
+
+# Miscellaneous
+pandas==1.2.4
+python-Levenshtein==0.12.2
+
+

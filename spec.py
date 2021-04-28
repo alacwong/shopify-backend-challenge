@@ -29,7 +29,7 @@ TAGS = [
 ]
 
 APISPEC_SPEC = APISpec(
-    title="Example API",
+    title="Image Repo Api",
     version="v1",
     info={"description": format_docstring(docs.API_DESCRIPTION)},
     plugins=[MarshmallowPlugin()],
