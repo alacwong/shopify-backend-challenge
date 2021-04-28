@@ -40,7 +40,7 @@ def register_commands(app):
         """
         Image(url="https://google.com", tag="test").save()
 
-    @cloud_cli.command('generate_csv')
+    @cloud_cli.command("generate_csv")
     def generate_csv():
         """
         Create csv files for training
@@ -55,27 +55,27 @@ def register_commands(app):
             if len(splits) != 4:
                 continue
             label = splits[2]
-            file_name = f'gs://shopify1/dataset/{label}/{splits[3]}'
+            file_name = f"gs://shopify1/dataset/{label}/{splits[3]}"
 
-            if file_name[-4:] == '.png' or file_name[-4:] == '.jpg':
+            if file_name[-4:] == ".png" or file_name[-4:] == ".jpg":
                 data.append((file_name, label))
 
         df = pandas.DataFrame(data)
-        df.to_csv('all_data.csv', header=False, index=False)
+        df.to_csv("all_data.csv", header=False, index=False)
 
-    @cloud_cli.command('generate_names')
+    @cloud_cli.command("generate_names")
     def get_pokemon_names():
         """
         Generate pokemon names
         """
         names = set()
-        with open('all_data.csv', 'r') as f:
+        with open("all_data.csv", "r") as f:
             reader = csv.reader(f)
             for row in reader:
                 label = row[1]
                 names.add(label)
 
-        with open('names.txt', 'w+') as f:
-            f.write(','.join(names))
+        with open("names.txt", "w+") as f:
+            f.write(",".join(names))
 
     app.cli.add_command(cloud_cli)

@@ -40,35 +40,30 @@ class ImageResource(ImageBaseResource):
         tag = get_closest_string(tag)
 
         images = list(Image.objects(tag=tag))
-        return {"images": images[page * limit: (page + 1) * limit]}
+        return {"images": images[page * limit : (page + 1) * limit]}
 
 
 class ReverseImageResource(ImageResource):
-
-    @use_args(file_schema, location='files')
+    @use_args(file_schema, location="files")
     @marshal_with(ImagesSchema)
     def get(self, args):
         """
         reverse image search endpoint
         """
 
-        image = args.get('file').read()
+        image = args.get("file").read()
         if not image:
             return {}
         prediction = predict(image)
 
-        limit = args.get('limit', 9)
-        page = args.get('page', 0)
+        limit = args.get("limit", 9)
+        page = args.get("page", 0)
 
-        images = {
-            pred: list(Image.objects(tag=pred))
-            for pred in prediction
-        }
+        images = {pred: list(Image.objects(tag=pred)) for pred in prediction}
 
         result = []
         for image in images:
             new_limit = int(limit * prediction[image])
-            result.extend(images[image][page * new_limit: (page + 1) * new_limit])
+            result.extend(images[image][page * new_limit : (page + 1) * new_limit])
 
-        return {'images': result}
-
+        return {"images": result}

@@ -9,7 +9,7 @@ def set_routes(app: Flask, bp: Blueprint, docs: FlaskApiSpec):
     # a list of resources
     resources = [
         (ImageResource, "/search/", "image", ["GET"]),
-        (ReverseImageResource, '/reverse_search/', 'reverse_image', ['GET'])
+        (ReverseImageResource, "/reverse_search/", "reverse_image", ["GET"]),
     ]
 
     for resource, route, name, methods in resources:

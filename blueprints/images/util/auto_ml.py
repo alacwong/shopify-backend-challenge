@@ -15,7 +15,9 @@ def predict(content):
     model_id = c.MODEL_ID
     location = c.LOCATION
 
-    predictor = automl.PredictionServiceClient.from_service_account_json('service_account.json')
+    predictor = automl.PredictionServiceClient.from_service_account_json(
+        "service_account.json"
+    )
 
     model_full_id = automl.AutoMlClient.model_path(project_id, location, model_id)
     image = automl.Image(image_bytes=content)

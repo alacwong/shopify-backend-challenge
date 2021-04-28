@@ -17,7 +17,7 @@ args_schema = {
 }
 
 file_schema = {
-    'file': fields.Field(),
+    "file": fields.Field(),
     "page": fields.Int(description="Page number of table", default=1),
     "limit": fields.Int(description="How many entries per page", default=5),
 }

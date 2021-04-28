@@ -8,7 +8,7 @@ from extensions import names
 def get_closest_string(string: str):
     string = string.lower()
     min_distance = 1000
-    min_string = ''
+    min_string = ""
 
     for name in names:
         dist = distance(name, string)
