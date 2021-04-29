@@ -12,3 +12,4 @@ config.py.bak
 
 tests
 pytest.ini
+venv

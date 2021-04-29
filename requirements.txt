@@ -6,10 +6,11 @@ flask_cors
 mongoengine==0.20.0
 
 # API
+webargs===6.1.1
 marshmallow===3.3.0
 flask_marshmallow===0.10.1
 marshmallow-sqlalchemy===0.21.0
-flask-apispec===0.8.8
+flask-apispec===0.10.0
 apispec===3.3.0
 
 # sending external requests

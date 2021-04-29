@@ -7,7 +7,7 @@ from flask_apispec import marshal_with, doc
 
 from ..schema import ImagesSchema, args_schema, file_schema
 from .image_base_resource import ImageBaseResource
-from webargs.flaskparser import use_args
+from webargs.flaskparser import use_args, use_kwargs
 from ..models.image import Image
 from ..util.fuzzy_string_matcher import get_closest_string
 from ..util.auto_ml import predict
@@ -45,19 +45,20 @@ class ImageResource(ImageBaseResource):
 
 class ReverseImageResource(ImageResource):
     @use_args(file_schema, location="files")
+    @use_args(args_schema, location='query')
     @marshal_with(ImagesSchema)
-    def get(self, args):
+    def post(self, file_args, query_args):
         """
         reverse image search endpoint
         """
 
-        image = args.get("file").read()
+        image = file_args.get("file").read()
         if not image:
             return {}
         prediction = predict(image)
 
-        limit = args.get("limit", 9)
-        page = args.get("page", 0)
+        limit = query_args.get("limit", 9)
+        page = query_args.get("page", 0)
 
         images = {pred: list(Image.objects(tag=pred)) for pred in prediction}
 
