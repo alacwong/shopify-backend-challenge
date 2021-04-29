@@ -3,9 +3,9 @@ REST endpoint for image search
 
 These endpoints can be reached at /images/search/.
 """
-from flask_apispec import marshal_with, doc
+from flask_apispec import marshal_with, doc, use_kwargs
 
-from ..schema import ImagesSchema, args_schema, file_schema
+from ..schema import ImagesSchema, ImageQuerySchema, FileSchema, PaginationSchema
 from .image_base_resource import ImageBaseResource
 from webargs.flaskparser import use_args
 from ..models.image import Image
@@ -14,19 +14,19 @@ from ..util.auto_ml import predict
 
 
 @doc(
-    description="""Image resource""",
+    description="""Search for a paginated list of images by keyword""",
 )
 class ImageResource(ImageBaseResource):
     @marshal_with(ImagesSchema)
-    @use_args(args_schema, location="query")
-    def get(self, args):
+    @use_kwargs(ImageQuerySchema, location='query')    # for documentation
+    def get(self, **kwargs):
         """
-        Return a paginated list of images.
+        Search for images by text using fuzzy string matching
         """
 
-        tag = args.get("pokemon")
-        page = args.get("page")
-        limit = args.get("limit")
+        tag = kwargs.get("pokemon")
+        page = kwargs.get("page")
+        limit = kwargs.get("limit")
 
         if not tag:
             return {}
@@ -43,22 +43,25 @@ class ImageResource(ImageBaseResource):
         return {"images": images[page * limit : (page + 1) * limit]}
 
 
+@doc(
+    description="""Search for similar images by uploading an image"""
+)
 class ReverseImageResource(ImageResource):
-    @use_args(file_schema, location="files")
-    @use_args(args_schema, location='query')
+    @use_kwargs(FileSchema, location="files")
+    @use_kwargs(PaginationSchema, location='query')
     @marshal_with(ImagesSchema)
-    def post(self, file_args, query_args):
+    def post(self, **kwargs):
         """
-        reverse image search endpoint
+        reverse image search based on tag classification with auto ml
         """
 
-        image = file_args.get("file").read()
+        image = kwargs.get("file").read()
         if not image:
             return {}
         prediction = predict(image)
 
-        limit = query_args.get("limit", 9)
-        page = query_args.get("page", 0)
+        limit = kwargs.get("limit", 9)
+        page = kwargs.get("page", 0)
 
         images = {pred: list(Image.objects(tag=pred)) for pred in prediction}
 
