@@ -1,5 +1,5 @@
 from . import client
-from blueprints.images.util.fuzzy_string_matcher import get_closest_string
+from blueprints.images.util.errors import INVALID_QUERY
 
 
 def test_root_url(client):
@@ -8,12 +8,14 @@ def test_root_url(client):
     assert response.json == {"description": "Not Found"}
 
 
-def test_closest_word():
+def test_fuzzy_search(client):
     """
     Test fuzzy string matcher
     """
-    pokemon = get_closest_string('charminder')
-    assert pokemon == 'Charmander'
+    response = client.get("/images/search?pokemon=charminder")
+    json = response.json
+    for image in json:
+        assert image['tag'] == 'Charmander'
 
 
 def test_search_endpoint(client):
@@ -22,6 +24,15 @@ def test_search_endpoint(client):
     """
 
     response = client.get("/images/search?pokemon=Abra")
-    for res in response:
-        assert res.tag == 'Abra'
+    json = response.json
+    for image in json:
+        assert image['tag'] == 'Abra'
 
+
+def test_invalid_query(client):
+    """
+    Test invalid query
+    """
+    response = client.get("/images/search?pokemon=Abra&page=-1")
+    assert response.status_code == 400
+    assert response.json == INVALID_QUERY

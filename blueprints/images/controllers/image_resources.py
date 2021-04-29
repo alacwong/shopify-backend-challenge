@@ -7,7 +7,7 @@ from flask_apispec import marshal_with, doc, use_kwargs
 
 from ..schema import ImagesSchema, ImageQuerySchema, FileSchema, PaginationSchema
 from .image_base_resource import ImageBaseResource
-from webargs.flaskparser import use_args
+from ..util.errors import INVALID_QUERY, FILE_NOT_FOUND
 from ..models.image import Image
 from ..util.fuzzy_string_matcher import get_closest_string
 from ..util.auto_ml import predict
@@ -29,13 +29,13 @@ class ImageResource(ImageBaseResource):
         limit = kwargs.get("limit")
 
         if not tag:
-            return {}
+            return INVALID_QUERY
 
-        if not page:
-            page = 0
+        if not(limit >= 0 and page >= 0):
+            return INVALID_QUERY
 
-        if not limit:
-            limit = 9
+        if not(limit >= 0 and page >= 0):
+            return INVALID_QUERY
 
         tag = get_closest_string(tag)
 
@@ -57,11 +57,14 @@ class ReverseImageResource(ImageResource):
 
         image = kwargs.get("file").read()
         if not image:
-            return {}
+            return FILE_NOT_FOUND
         prediction = predict(image)
 
         limit = kwargs.get("limit", 9)
         page = kwargs.get("page", 0)
+
+        if not(limit >= 0 and page >= 0):
+            return INVALID_QUERY
 
         images = {pred: list(Image.objects(tag=pred)) for pred in prediction}
 

@@ -8,7 +8,7 @@ from .controllers.image_resources import ImageResource, ReverseImageResource
 def set_routes(app: Flask, bp: Blueprint, docs: FlaskApiSpec):
     # a list of resources
     resources = [
-        (ImageResource, "/search/", "image", ["GET"]),
+        (ImageResource, "/search/", "img", ["GET"]),
         (ReverseImageResource, "/reverse_search/", "reverse_image", ["POST"]),
     ]
 
