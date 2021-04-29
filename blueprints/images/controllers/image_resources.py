@@ -7,7 +7,7 @@ from flask_apispec import marshal_with, doc
 
 from ..schema import ImagesSchema, args_schema, file_schema
 from .image_base_resource import ImageBaseResource
-from webargs.flaskparser import use_args, use_kwargs
+from webargs.flaskparser import use_args
 from ..models.image import Image
 from ..util.fuzzy_string_matcher import get_closest_string
 from ..util.auto_ml import predict
