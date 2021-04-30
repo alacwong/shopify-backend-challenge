@@ -11,9 +11,9 @@ generation 1 pokemon are supported.
 This api has 2 endpoints. Text search and Reverse image search.
 Text search is fuzzy so don't worry about misspelling!
 
-Further documentation can be found [here](https://shopify-backend-4wd24tlmta-uc.a.run.app/swagger-ui/)
+**Further documentation can be found [here](https://shopify-backend-4wd24tlmta-uc.a.run.app/swagger-ui/)**
 
-Front-end url to play with this api [here](https://shopify-backend-challenge-frontend.vercel.app/)
+**Front-end url to play with this api [here](https://shopify-backend-challenge-frontend.vercel.app/)** *please use Chrome on desktop*
 
 Front-end Repository (code) found [here](https://github.com/alacwong/shopify-backend-challenge-frontend)
 
