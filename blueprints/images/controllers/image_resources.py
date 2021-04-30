@@ -25,8 +25,8 @@ class ImageResource(ImageBaseResource):
         """
 
         tag = kwargs.get("pokemon")
-        page = kwargs.get("page")
-        limit = kwargs.get("limit")
+        page = kwargs.get("page", 0)
+        limit = kwargs.get("limit", 9)
 
         if not tag:
             return INVALID_QUERY
@@ -47,8 +47,8 @@ class ImageResource(ImageBaseResource):
     description="""Search for similar images by uploading an image"""
 )
 class ReverseImageResource(ImageResource):
-    @use_kwargs(FileSchema, location="files")
     @use_kwargs(PaginationSchema, location='query')
+    @use_kwargs(FileSchema, location="files")
     @marshal_with(ImagesSchema)
     def post(self, **kwargs):
         """

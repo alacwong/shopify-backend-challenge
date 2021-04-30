@@ -1,62 +1,71 @@
-# Boilerplate for Flask APIs
-A skeleton Flask API only application to quickstart development.
+# Pokemon Image Repository
 
-## Features
-- Uses [Flask Blueprints](https://flask.palletsprojects.com/en/1.1.x/blueprints/) for module separation
-- ORM-ready with mongoengine and MongoDB.
-- Fully dockerized and deployment ready
-- [CORS](https://flask-cors.readthedocs.io/en/latest/) protected
-- Integrates with [Marshmallow](https://flask-marshmallow.readthedocs.io/en/latest/)
-- [Sentry](https://sentry.io/) Integration
-- Documentation generated with [Flask-APISpec](https://github.com/jmcarp/flask-apispec/)
-- [Celery](http://www.celeryproject.org/) worker queue support.
+## Introduction
 
-## Deployment
-`Dockerfile` is ready for deployment.
-It is recommended to reverse proxy through nginx.
+This api is an image repository for Pokemon! Currently only
+generation 1 pokemon are supported.
 
-## Development
-### Setup
 
-Note: This project *requires* Python 3.7+ installed. For Mac users, ensure you are using the correct version of Python because the OS preinstalls Python 2.7 and default `pip` and `python` commands execute in v2.7 rather than v3.x.
+## Endpoints
 
-1. Clone this repo or create a new one with this as a template.
+This api has 2 endpoints. Text search and Reverse image search.
+Text search is fuzzy so don't worry about misspelling!
 
-1. Create a virtual environment for the project and activate it. Run `pip3 install virtualenv` if virtualenv is not installed on Python3.7+
-    ```
-    $ cd flask-api-starter  # or your repo name
-    $ virtualenv venv --python=python
-    $ source venv/bin/activate
-    ```
+Further documentation can be found [here](https://shopify-backend-4wd24tlmta-uc.a.run.app/swagger-ui/)
 
-4. Install the required dependencies, and setup automatic code quality checking with `black`.
-    ```
-    (flask-starter-venv) $ pip install -r requirements.txt
-    (flask-starter-venv) $ pip install -r requirements-dev.txt
-    (flask-starter-venv) $ pre-commit install
-    ```
+Front-end url to play with this api [here](https://shopify-backend-challenge-frontend.vercel.app/)
 
-5. Edit `config.py.bak` with the proper credentials and move it to `config.py`.
-6. Run Migrations
-    ```
-    (flask-starter-venv) $ flask db upgrade
-    ```
-    
-### Run Locally
-Remember to fill any necessary fields in `config.py`.
-1. Make sure you are in your virtualenv that you setup
-    ```
-    $ source flask-starter-venv/bin/activate
-    ```
-2. Start server
-    ```
-    (flask-starter-venv) $ flask run
-    ```
-3. Start Celery worker
-    ```
-    (flask-starter-venv) $ celery worker -A worker.celery --loglevel=info
-    ```
-    
-### Setting up Blueprints
-Flask blueprints are like modules. To create a new one, you can copy the example blueprint, and modify the `__init__.py`
-to change the prefix url. Ensure that it is also included in `app.py`.
+Front-end Repository (code) found [here](https://github.com/alacwong/shopify-backend-challenge-frontend)
+
+* Front-end UI components were inspired by this [website](https://h-richard.com/)
+
+## Running locally
+
+Make sure you have Python 3.7 installed to run locally
+
+```
+$ pip install -r requirements.txt
+$ flask run
+```
+
+## Methodology 
+
+The search function seemed to be the most interesting problem to crack, so I
+decided tackle it. Obviously building a "Google Image" clone would be very difficult. Even 
+for text search, without data labels it would difficult to implement let alone reverse image search.
+
+To solve this, I needed labeled data! Luckily I found a large Pokemon dataset on [kaggle](https://www.kaggle.com/thedagger/pokemon-generation-one).
+I then created a bucket on google cloud to store these images. I then setup a MongoDB table to map the pokemon
+names to the url found on the cloud for easy querying. For more interesting querying, I introduced fuzzy string
+matching which uses the edit distance to determine closest pokemon name. Since my dataset was already on google, I decided
+to use auto-ml to quickly train an image classifier that would later be used for reverse image search. The classifier
+would classifier new images as a generation 1 pokemon, I would then output pokemon of that result.
+
+I used the Flask framework for this Api. Flask api-spec provided good documentation with swagger.
+For deployment I dockerized this application and deployed on Cloud run as a microservice which makes
+this highly scalable.
+
+## Next steps/ Future Improvements
+
+1. Edit distance threshold, eg entering a search term like 'weiugnowegn', would 
+still yield results since we find the closest pokemon name, maybe it would be
+better to output no results.
+
+2. More query terms, such as pokemon type (fire, flying, water ... ). This could be possible
+but would require more preprocessing to determine additional tags for pokemon and update current table
+to include these tags as well.
+
+3. AutoML is expensive. I used around 30 node hours to train this model which was not cheap.
+AutoML is very good for quick proto-typing, but does not always provide the best hyper-parameters
+and is expensive so not very scalable. I would fix this by implementing my own image classifier 
+that I can train whenever I want probably using a framework like Tensorflow or Pytorch. However
+this would be difficult and would require quite a bit of time.
+
+4. Reverse image search was only possible for this problem, because I limited 
+the number of label/outputs for this problem. Therefore it would not work for a general case
+(eg any image). To solve this, I would probably need to do more research on this topic.
+This does seem like a clustering /un-supervised learning problem, however I would need to pick 
+good features to do this. Perhaps, I could engineer good feature maps with a convolutional neural network?
+
+
+

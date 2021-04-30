@@ -2,24 +2,22 @@ from marshmallow import Schema, fields
 
 
 class ImageSchema(Schema):
-    tag = fields.Str(description='Keyword to search for this image')
-    url = fields.Str(description='Url corresponding to image on the cloud')
+    tag = fields.Str(description='Tag indicating type of name of Pokemon for the current image')
+    url = fields.Str(description='Corresponding url pointing to Pokemon Image by Cloud Provider')
 
 
 class ImagesSchema(Schema):
-    images = fields.List(fields.Nested(ImageSchema), description='List of image documents')
+    images = fields.List(fields.Nested(ImageSchema), description='Collection of Image Documents')
 
 
 class PaginationSchema(Schema):
-    limit = fields.Int(description="How many entries per page", default=5, example=10)
-    pokemon = fields.Str(description="Name of pokemon images to be searched", example='Abra')
+    limit = fields.Int(description="Maximum number of entries per query", default=5, example=10)
+    page = fields.Int(description="Query offset amount", default=1, example=0)
 
 
 class ImageQuerySchema(PaginationSchema):
-    page = fields.Int(description="Page number of table", default=1, example=0)
-    limit = fields.Int(description="How many entries per page", default=5, example=10)
-    pokemon = fields.Str(description="Pokemon image to be searched", example='Abra')
+    pokemon = fields.Str(description="Text search term to fetch Pokemon of that name", example='Abra')
 
 
 class FileSchema(Schema):
-    file = fields.Field(description='Pokemon image to find similar images for')
+    file = fields.Field(description='File search term to fetch Pokemon of that look')
