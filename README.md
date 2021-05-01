@@ -18,6 +18,7 @@ Text search is fuzzy so don't worry about misspelling!
 Front-end Repository (code) found [here](https://github.com/alacwong/shopify-backend-challenge-frontend)
 
 * Front-end UI components were inspired by this [website](https://h-richard.com/)
+* Note api may have ~2s cold start since cloud run is serverless
 
 ## Running locally
 
