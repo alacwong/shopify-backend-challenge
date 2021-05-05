@@ -19,7 +19,7 @@ Front-end Repository (code) found [here](https://github.com/alacwong/shopify-bac
 
 * Front-end UI components were inspired by this [website](https://h-richard.com/)
 * Note api may have ~2s cold start since cloud run is serverless
-* Note reverse image search depends on classification performance whichs works better/worse on diffeernt pokemon, eg does pretty well with charmander/charizard, but doesn't work as well with Eevee
+* Note reverse image search depends on classification performance which works better/worse on different pokemon, eg does pretty well with charmander/charizard, but doesn't work as well with Eevee
 
 ## Running locally
 
