@@ -5,6 +5,8 @@
 This api is an image repository for Pokemon! Currently only
 generation 1 pokemon are supported.
 
+**  [Quick Demo](https://www.loom.com/share/2d6326fd0908403d9af657d8a83c4268) since some functionality in the deployment may be taken down during the time of reading this
+
 
 ## Endpoints
 
